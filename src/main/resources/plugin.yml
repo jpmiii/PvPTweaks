@@ -1,0 +1,4 @@
+name: PvPTweaks
+main: com.civclassic.pvptweaks.PvPTweaks
+version: ${project.version}
+author: biggestnerd

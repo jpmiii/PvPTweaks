@@ -1,0 +1,35 @@
+tweaks:
+  EnchantmentDisabler:
+    disabled:
+    - MENDING
+    - FROST_WALKER
+  GeneralTweaks:
+    healthRegen: 1.0
+  PearlTweaks:
+    #cooldown in ticks, 300 = 15 seconds
+    cooldown: 300
+    refundPearl: true
+    effects:
+      WEAKNESS:
+        duration: 10
+        strength: 0
+      HUNGER:
+        duration: 10
+        strength: 0
+    percentHealthOnPearl: 0.5
+  PotionTweaks:
+    drinkableDurationMultiplier: 1.0
+    splashDurationMultiplier: 0.75
+    strengthMultiplier: 3.0
+    instantHealthMultiplier: 1.5
+  WeaponTweaks:
+    DIAMOND_AXE:
+      damage: 6
+    IRON_AXE:
+      damage: 5
+    STONE_AXE:
+      damage: 4
+    GOLD_AXE:
+      damage: 3
+    WOOD_AXE:
+      damage: 3
