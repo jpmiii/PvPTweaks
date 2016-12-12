@@ -5,16 +5,20 @@ tweaks:
     - FROST_WALKER
   GeneralTweaks:
     healthRegen: 1.0
+    regenDelay: 4000
   PearlTweaks:
     #cooldown in ticks, 300 = 15 seconds
     cooldown: 300
     refundPearl: true
     effects:
       WEAKNESS:
-        duration: 10
+        duration: 200
         strength: 0
       HUNGER:
-        duration: 10
+        duration: 200
+        strength: 0
+      SLOWNESS:
+        duration: 200
         strength: 0
     percentHealthOnPearl: 0.5
   PotionTweaks:

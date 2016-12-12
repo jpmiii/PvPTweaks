@@ -6,7 +6,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -56,11 +58,14 @@ public class PotionTweaks extends Tweak {
 			if(!effect.getType().isInstant()) {
 				int newDuration = (int) (effect.getDuration() * splashDurationMultiplier * intensity);
 				player.addPotionEffect(new PotionEffect(effect.getType(), newDuration, effect.getAmplifier()), true);
-			} else if(effect.getType() == PotionEffectType.HEAL) {
-				double base = 4.0 * (effect.getAmplifier() + 1) * intensity;
-				double toAdd = (base * instantHealthMultiplier) - base;
-				player.setHealth(Math.min(player.getHealth() + toAdd, player.getMaxHealth()));
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onEntityRegainHealth(EntityRegainHealthEvent event) {
+		if(event.getRegainReason() == RegainReason.MAGIC) {
+			event.setAmount(event.getAmount() * instantHealthMultiplier);
 		}
 	}
 	
@@ -71,7 +76,7 @@ public class PotionTweaks extends Tweak {
 		if(item.getType() == Material.POTION && item.hasItemMeta() && item.getItemMeta() instanceof PotionMeta) {
 			PotionData data = ((PotionMeta) item.getItemMeta()).getBasePotionData();
 			PotionEffectType type = data.getType().getEffectType();
-			if(type.isInstant()) return;
+			if(type == PotionEffectType.HARM || type == PotionEffectType.HEAL) return;
 			int duration = (int) (getDuration(type, data.isExtended(), data.isUpgraded()) * drinkableDurationMultiplier);
 			player.addPotionEffect(new PotionEffect(type, duration, data.isUpgraded() ? 1 : 0), true);
 		}
@@ -95,4 +100,13 @@ public class PotionTweaks extends Tweak {
 		instantHealthMultiplier = config.getDouble("instantHealthMultiplier");
 	}
 
+	@Override
+	protected String status() {
+		StringBuilder status = new StringBuilder();
+		status.append("  drinkable duration multiplier: ").append(drinkableDurationMultiplier).append("\n");
+		status.append("  splash duration multiplier: ").append(splashDurationMultiplier).append("\n");
+		status.append("  strength modifier: ").append(strengthMultiplier).append("\n");
+		status.append("  instant health multiplier: ").append(instantHealthMultiplier).append("\n");
+		return status.toString();
+	}
 }

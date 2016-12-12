@@ -1,5 +1,6 @@
 package com.civclassic.pvptweaks.tweaks;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EnderPearl;
@@ -23,13 +25,17 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.civclassic.pvptweaks.PvPTweaks;
 import com.civclassic.pvptweaks.Tweak;
+import com.civclassic.pvptweaks.util.ICooldownHandler;
 import com.civclassic.pvptweaks.util.TickCooldownHandler;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
 
-import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_10_R1.ItemEnderPearl;
 
 public class PearlTweaks extends Tweak {
 	
-	private TickCooldownHandler<UUID> cds;
+	private ICooldownHandler<UUID> cds;
 	private List<PotionEffect> effectsOnPearl;
 	private double percentHealthOnPearl;
 	private boolean refundPearl;
@@ -62,20 +68,33 @@ public class PearlTweaks extends Tweak {
 	
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent event) {
-		if(event.getEntity() instanceof EnderPearl) return;
+		if(!(event.getEntity() instanceof EnderPearl)) return;
 		if(!(event.getEntity().getShooter() instanceof Player)) return;
-		
+
 		Player shooter = (Player)event.getEntity().getShooter();
 		if(cds.onCooldown(shooter.getUniqueId())) {
 			long cd = cds.getRemainingCooldown(shooter.getUniqueId());
 			event.setCancelled(true);
 			DecimalFormat df = new DecimalFormat("#.##");
 			shooter.sendMessage(ChatColor.RED + "You may pearl again in "
-						+ df.format(((double) cd / 20.0)) + " seconds");
+						+ df.format(((double) cd / 20)) + " seconds");
 			if(refundPearl) {
 				shooter.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
 			}
-			return;
+		} else {
+			cds.putOnCooldown(shooter.getUniqueId());
+			sendCooldownPacket(shooter);
+		}
+	}
+
+	private void sendCooldownPacket(Player player) {
+		PacketContainer packet = new PacketContainer(PacketType.Play.Server.SET_COOLDOWN);
+		packet.getIntegers().write(0, (int) cds.getTotalCooldown());
+		packet.getModifier().write(0, new ItemEnderPearl());
+		try {
+			ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -98,4 +117,16 @@ public class PearlTweaks extends Tweak {
 		percentHealthOnPearl = config.getDouble("percentHealthOnPearl");
 	}
 
+	@Override
+	protected String status() {
+		StringBuilder status = new StringBuilder();
+		status.append("  cooldown: ").append(cds.getTotalCooldown()).append("\n");
+		status.append("  refundPearl: ").append(refundPearl).append("\n");
+		status.append("  percentHealth: ").append(percentHealthOnPearl).append("\n");
+		status.append("  status effects: \n");
+		for(PotionEffect effect : effectsOnPearl) {
+			status.append("    ").append(effect.toString()).append("\n");
+		}
+		return status.toString();
+	}
 }

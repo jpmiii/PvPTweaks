@@ -2,3 +2,13 @@ name: PvPTweaks
 main: com.civclassic.pvptweaks.PvPTweaks
 version: ${project.version}
 author: biggestnerd
+depend: [ProtocolLib]
+commands:
+  tweaks:
+    usage: "/tweaks <tweak> <enable|disable>"
+    description: Enables or disables tweaks
+    permission: pvptweaks.admin
+permissions:
+  pvptweaks.admin:
+    description: Gives access to le commands
+    default: op

@@ -72,9 +72,11 @@ public class WeaponTweaks extends Tweak {
 		event.setCurrentItem(result);
 	}
 	
+	@Override
 	public void loadConfig(ConfigurationSection config) {
 		for(String key : config.getKeys(false)) {
 			Material mat = Material.getMaterial(key);
+			if(mat == null) continue;
 			ConfigurationSection weapon = config.getConfigurationSection(key);
 			int damage = weapon.contains("damage") ? weapon.getInt("damage") : -1;
 			double attackSpeed = weapon.contains("attackSpeed") ? weapon.getDouble("attackSpeed") : -1.0;
@@ -82,6 +84,18 @@ public class WeaponTweaks extends Tweak {
 			WeaponConfig wc = new WeaponConfig(damage, attackSpeed);
 			weapons.put(mat, wc);
 		}
+	}
+	
+	@Override
+	protected String status() {
+		StringBuilder status = new StringBuilder();
+		for(Material mat : weapons.keySet()) {
+			WeaponConfig config = weapons.get(mat);
+			status.append(" ").append(mat).append(": \n");
+			status.append("   damage: ").append(config.getDamage()).append("\n");
+			status.append("   attack speed: ").append(config.getAttackSpeed()).append("\n");
+		}
+		return status.toString();
 	}
 	
 	private class WeaponConfig {

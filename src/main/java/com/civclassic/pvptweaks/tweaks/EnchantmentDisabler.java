@@ -11,8 +11,8 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.civclassic.pvptweaks.Tweak;
 import com.civclassic.pvptweaks.PvPTweaks;
+import com.civclassic.pvptweaks.Tweak;
 
 public class EnchantmentDisabler extends Tweak {
 
@@ -56,4 +56,13 @@ public class EnchantmentDisabler extends Tweak {
 		}
 	}
 
+	@Override
+	protected String status() {
+		StringBuilder status = new StringBuilder();
+		status.append("  Disabled enchants: \n");
+		for(Enchantment enchant : disabled) {
+			status.append("    ").append(enchant.getName()).append("\n");
+		}
+		return status.toString();
+	}
 }
