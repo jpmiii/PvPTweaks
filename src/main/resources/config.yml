@@ -37,3 +37,8 @@ tweaks:
       damage: 3
     WOOD_AXE:
       damage: 3
+  ProtectionTweaks:
+    armor_mitigation: 10
+    prot_mitigation: 7
+    prot_scale: 0.5
+    linear_prot: true
