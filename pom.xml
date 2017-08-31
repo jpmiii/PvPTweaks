@@ -8,6 +8,14 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
+		<repository>
+			<id>minelink-releases</id>
+			<url>http://repo.minelink.net/content/groups/public</url>
+		</repository>
+		<repository>
+      		<id>protocollib</id>
+      		<url>http://repo.dmulloy2.net/content/groups/public/</url>
+    	</repository>
 	</repositories>
 
     <dependencies>
