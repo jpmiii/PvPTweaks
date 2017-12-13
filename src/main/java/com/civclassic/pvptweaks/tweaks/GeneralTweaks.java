@@ -3,6 +3,7 @@ package com.civclassic.pvptweaks.tweaks;
 import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -26,7 +27,7 @@ public class GeneralTweaks extends Tweak {
 	@EventHandler
 	public void onEntityRegainHealth(EntityRegainHealthEvent event) {
 		if(event.getRegainReason() != RegainReason.REGEN && event.getRegainReason() != RegainReason.SATIATED
-				&& !(event.getEntity() instanceof Player)) return;
+				&& event.getEntityType() != EntityType.PLAYER) return;
 		Player player = (Player) event.getEntity();
 		if(regenCds.onCoolDown(player.getUniqueId())) {
 			event.setCancelled(true);
