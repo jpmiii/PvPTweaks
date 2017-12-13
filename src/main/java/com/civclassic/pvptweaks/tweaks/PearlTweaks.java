@@ -25,17 +25,17 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.civclassic.pvptweaks.PvPTweaks;
 import com.civclassic.pvptweaks.Tweak;
-import com.civclassic.pvptweaks.util.ICooldownHandler;
-import com.civclassic.pvptweaks.util.TickCooldownHandler;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 
-import net.minecraft.server.v1_10_R1.ItemEnderPearl;
+import net.minecraft.server.v1_12_R1.ItemEnderPearl;
+import vg.civcraft.mc.civmodcore.util.cooldowns.ICoolDownHandler;
+import vg.civcraft.mc.civmodcore.util.cooldowns.TickCoolDownHandler;
 
 public class PearlTweaks extends Tweak {
 	
-	private ICooldownHandler<UUID> cds;
+	private ICoolDownHandler<UUID> cds;
 	private List<PotionEffect> effectsOnPearl;
 	private double percentHealthOnPearl;
 	private boolean refundPearl;
@@ -72,8 +72,8 @@ public class PearlTweaks extends Tweak {
 		if(!(event.getEntity().getShooter() instanceof Player)) return;
 
 		Player shooter = (Player)event.getEntity().getShooter();
-		if(cds.onCooldown(shooter.getUniqueId())) {
-			long cd = cds.getRemainingCooldown(shooter.getUniqueId());
+		if(cds.onCoolDown(shooter.getUniqueId())) {
+			long cd = cds.getRemainingCoolDown(shooter.getUniqueId());
 			event.setCancelled(true);
 			DecimalFormat df = new DecimalFormat("#.##");
 			shooter.sendMessage(ChatColor.RED + "You may pearl again in "
@@ -82,14 +82,14 @@ public class PearlTweaks extends Tweak {
 				shooter.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
 			}
 		} else {
-			cds.putOnCooldown(shooter.getUniqueId());
+			cds.putOnCoolDown(shooter.getUniqueId());
 			sendCooldownPacket(shooter);
 		}
 	}
 
 	private void sendCooldownPacket(Player player) {
 		PacketContainer packet = new PacketContainer(PacketType.Play.Server.SET_COOLDOWN);
-		packet.getIntegers().write(0, (int) cds.getTotalCooldown());
+		packet.getIntegers().write(0, (int) cds.getTotalCoolDown());
 		packet.getModifier().write(0, new ItemEnderPearl());
 		try {
 			ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
@@ -100,7 +100,7 @@ public class PearlTweaks extends Tweak {
 	
 	@Override
 	public void loadConfig(ConfigurationSection config) {
-		cds = new TickCooldownHandler<UUID>(config.getLong("cooldown"));
+		cds = new TickCoolDownHandler<UUID>(plugin(), config.getLong("cooldown"));
 		refundPearl = config.getBoolean("refundPearl");
 		if(config.contains("effects")) {
 			effectsOnPearl = new ArrayList<PotionEffect>();
@@ -120,7 +120,7 @@ public class PearlTweaks extends Tweak {
 	@Override
 	protected String status() {
 		StringBuilder status = new StringBuilder();
-		status.append("  cooldown: ").append(cds.getTotalCooldown()).append("\n");
+		status.append("  cooldown: ").append(cds.getTotalCoolDown()).append("\n");
 		status.append("  refundPearl: ").append(refundPearl).append("\n");
 		status.append("  percentHealth: ").append(percentHealthOnPearl).append("\n");
 		status.append("  status effects: \n");

@@ -48,4 +48,8 @@ public abstract class Tweak implements Listener {
 	public boolean isEnabled() {
 		return enabled;
 	}
+	
+	public PvPTweaks plugin() {
+		return plugin;
+	}
 }

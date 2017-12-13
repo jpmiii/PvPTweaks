@@ -10,11 +10,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.reflect.ClassPath;
 
-public class PvPTweaks extends JavaPlugin {
+import vg.civcraft.mc.civmodcore.ACivMod;
+
+public class PvPTweaks extends ACivMod {
 	
 	private static PvPTweaks instance;
 	
@@ -115,6 +116,10 @@ public class PvPTweaks extends JavaPlugin {
 			}
 		}
 		return possible;
+	}
+	
+	public String getPluginName() {
+		return "PvPTweaks";
 	}
 
 	public static PvPTweaks getInstance() {

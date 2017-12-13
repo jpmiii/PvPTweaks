@@ -2,7 +2,7 @@ name: PvPTweaks
 main: com.civclassic.pvptweaks.PvPTweaks
 version: ${project.version}
 author: biggestnerd
-depend: [ProtocolLib]
+depend: [ProtocolLib, CivModCore]
 commands:
   tweaks:
     usage: "/tweaks <tweak> <enable|disable>"

@@ -10,13 +10,14 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
 import com.civclassic.pvptweaks.PvPTweaks;
 import com.civclassic.pvptweaks.Tweak;
-import com.civclassic.pvptweaks.util.ICooldownHandler;
-import com.civclassic.pvptweaks.util.MillisecondCooldownHandler;
+
+import vg.civcraft.mc.civmodcore.util.cooldowns.ICoolDownHandler;
+import vg.civcraft.mc.civmodcore.util.cooldowns.MilliSecCoolDownHandler;
 
 public class GeneralTweaks extends Tweak {
 
 	private double healthRegen;
-	private ICooldownHandler<UUID> regenCds;
+	private ICoolDownHandler<UUID> regenCds;
 	
 	public GeneralTweaks(PvPTweaks plugin, ConfigurationSection config) {
 		super(plugin, config);
@@ -27,18 +28,18 @@ public class GeneralTweaks extends Tweak {
 		if(event.getRegainReason() != RegainReason.REGEN && event.getRegainReason() != RegainReason.SATIATED
 				&& event.getEntity() instanceof Player) return;
 		Player player = (Player) event.getEntity();
-		if(regenCds.onCooldown(player.getUniqueId())) {
+		if(regenCds.onCoolDown(player.getUniqueId())) {
 			event.setCancelled(true);
 		} else {
 			event.setAmount(healthRegen);
-			regenCds.putOnCooldown(player.getUniqueId());
+			regenCds.putOnCoolDown(player.getUniqueId());
 		}
 	}
 	
 	@Override
 	public void loadConfig(ConfigurationSection config) {
 		healthRegen = config.getDouble("healthRegen");
-		regenCds = new MillisecondCooldownHandler<UUID>(config.getLong("regenDelay"));
+		regenCds = new MilliSecCoolDownHandler<UUID>(config.getLong("regenDelay"));
 	}
 
 	@Override

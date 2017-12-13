@@ -2,15 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.civclassic.pvptweaks</groupId>
   <artifactId>PvPTweaks</artifactId>
-  <version>1.0</version>
+  <version>1.1.0</version>
   	<repositories>
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
 		<repository>
-			<id>minelink-releases</id>
-			<url>http://repo.minelink.net/content/groups/public</url>
+			<id>devoted</id>
+			<url>https://build.devotedmc.com/plugin/repository/everything/</url>
 		</repository>
 		<repository>
       		<id>protocollib</id>
@@ -22,14 +22,19 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
+            <version>1.12-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
         	<groupId>com.comphenix.protocol</groupId>
         	<artifactId>ProtocolLib</artifactId>
-        	<version>4.0.2-SNAPSHOT</version>
+        	<version>4.3.0-SNAPSHOT</version>
         	<scope>provided</scope>
+        </dependency>
+        <dependency>
+        	<groupId>vg.civcraft.mc.civmodcore</groupId>
+        	<artifactId>CivModCore</artifactId>
+        	<version>1.6.0</version>
         </dependency>
     </dependencies>
 
