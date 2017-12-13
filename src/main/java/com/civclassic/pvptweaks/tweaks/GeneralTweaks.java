@@ -26,7 +26,7 @@ public class GeneralTweaks extends Tweak {
 	@EventHandler
 	public void onEntityRegainHealth(EntityRegainHealthEvent event) {
 		if(event.getRegainReason() != RegainReason.REGEN && event.getRegainReason() != RegainReason.SATIATED
-				&& event.getEntity() instanceof Player) return;
+				&& !(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if(regenCds.onCoolDown(player.getUniqueId())) {
 			event.setCancelled(true);
