@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -47,7 +48,7 @@ public class PotionTweaks extends Tweak {
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPotionSplash(PotionSplashEvent event) {
 		PotionEffect effect = event.getEntity().getEffects().iterator().next();
 		if(effect == null) return;
@@ -69,7 +70,7 @@ public class PotionTweaks extends Tweak {
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
 		Player player = event.getPlayer();
 		ItemStack item = event.getItem();
