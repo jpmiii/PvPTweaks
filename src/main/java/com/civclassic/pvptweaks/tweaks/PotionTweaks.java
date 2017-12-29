@@ -47,7 +47,7 @@ public class PotionTweaks extends Tweak {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPotionSplash(PotionSplashEvent event) {
 		PotionEffect effect = event.getEntity().getEffects().iterator().next();
 		if(effect == null) return;
@@ -69,7 +69,7 @@ public class PotionTweaks extends Tweak {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
 		Player player = event.getPlayer();
 		ItemStack item = event.getItem();
