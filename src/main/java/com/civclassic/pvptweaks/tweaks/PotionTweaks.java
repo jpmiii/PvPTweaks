@@ -49,17 +49,19 @@ public class PotionTweaks extends Tweak {
 	
 	@EventHandler
 	public void onPotionSplash(PotionSplashEvent event) {
-		PotionEffect effect = event.getEntity().getEffects().iterator().next();
-		if(effect == null) return;
-		for(LivingEntity entity : event.getAffectedEntities()) {
-			if(!(entity instanceof Player)) continue;
-			Player player = (Player) entity;
-			double intensity = event.getIntensity(player);
-			if(!effect.getType().isInstant()) {
-				int newDuration = (int) (effect.getDuration() * splashDurationMultiplier * intensity);
-				player.addPotionEffect(new PotionEffect(effect.getType(), newDuration, effect.getAmplifier()), true);
+		event.getEntity().getEffects().forEach(effect -> {
+			if(effect != null){
+				for(LivingEntity entity : event.getAffectedEntities()) {
+					if(!(entity instanceof Player)) continue;
+					Player player = (Player) entity;
+					double intensity = event.getIntensity(player);
+					if(!effect.getType().isInstant()) {
+						int newDuration = (int) (effect.getDuration() * splashDurationMultiplier * intensity);
+						player.addPotionEffect(new PotionEffect(effect.getType(), newDuration, effect.getAmplifier()), true);
+					}
+				}
 			}
-		}
+		});
 	}
 	
 	@EventHandler
