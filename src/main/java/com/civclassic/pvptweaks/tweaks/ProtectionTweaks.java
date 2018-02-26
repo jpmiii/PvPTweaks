@@ -148,7 +148,7 @@ public class ProtectionTweaks extends Tweak {
 		
 		int epf = 0;
 		for(ItemStack armor : inv.getArmorContents()) {
-			int level = armor.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+			int level = armor == null ? 0 : armor.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
 			if(level == 4) level = 5;
 			epf += level;
 		}
@@ -161,7 +161,7 @@ public class ProtectionTweaks extends Tweak {
 		
 		int epf = 0;
 		for(ItemStack armor : inv.getArmorContents()) {
-			epf += armor.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL) * 1.25;
+			epf += armor == null ? 0 : armor.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL) * 1.25;
 		}
 		return epf*0.75;
 	}
